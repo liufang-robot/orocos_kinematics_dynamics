@@ -13,6 +13,8 @@ ELSE(MSVC)
     SET(LIB_TYPE SHARED)
 ENDIF(MSVC)
 
+SET(LIB_TYPE STATIC)
+
 CONFIGURE_FILE(config.h.in config.h @ONLY)
 
 #### Settings for rpath
@@ -56,6 +58,7 @@ ENDIF()
 #####end RPATH
 
 ADD_LIBRARY(orocos-kdl ${LIB_TYPE} ${KDL_SRCS} config.h)
+set_property(TARGET orocos-kdl PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 SET_TARGET_PROPERTIES( orocos-kdl PROPERTIES
   SOVERSION "${KDL_VERSION_MAJOR}.${KDL_VERSION_MINOR}"
