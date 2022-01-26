@@ -6,7 +6,7 @@ if(POLICY CMP0057)
   cmake_policy(SET CMP0057 NEW)  # support IN_LISTS which is required for PyBind11 2.6 and newer
 endif()
 
-project(python_orocos_kdl VERSION 1.5.0)
+project(python_orocos_kdl VERSION 1.5.1)
 
 # find a matching version of orocos_kdl
 find_package(orocos_kdl ${PROJECT_VERSION} EXACT REQUIRED)
@@ -46,7 +46,13 @@ else()
   set(PYTHON_MODULE_EXTENSION ".so")
 endif()
 
-add_subdirectory(pybind11)
+find_package(pybind11 QUIET)
+if(NOT ${pybind11_FOUND})
+  message(STATUS "pybind11 not found, building from source")
+  add_subdirectory(pybind11)
+else()
+  message(STATUS "pybind11 found, building against installed version")
+endif()
 pybind11_add_module(${LIBRARY_NAME}
   PyKDL/PyKDL.h
   PyKDL/PyKDL.cpp
